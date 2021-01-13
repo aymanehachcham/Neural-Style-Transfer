@@ -30,7 +30,7 @@ class StyleTransferModel(nn.Module):
         self.vgg19_style_model, _, _ = self.extract_model_and_losses(self.get_layers(self.load_model()))
 
     def forward(self, content_input):
-        output = self.__train_loop(content_input, num_steps=100)
+        output = self.__train_loop(content_input, num_steps=1000)
         return output
 
 

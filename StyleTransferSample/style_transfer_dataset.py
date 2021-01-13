@@ -5,7 +5,7 @@ from PIL import Image
 from torchvision import transforms
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset
-import numpy as np
+import imghdr
 
 class StyleTransferSample(Dataset):
 
@@ -13,7 +13,12 @@ class StyleTransferSample(Dataset):
         if image_path is not None:
             if os.path.exists(image_path):
                 self.image_file = image_path
-                self.image = Image.open(self.image_file)
+                if imghdr.what(self.image_file) == 'png':
+                    #Apply RGB conversion:
+                    image = Image.open(self.image_file)
+                    self.image = image.convert('RGB')
+                else:
+                    self.image = Image.open(self.image_file)
             else:
                 raise ValueError('Please give a correct image path')
 
@@ -23,7 +28,7 @@ class StyleTransferSample(Dataset):
 
         if device == 'cuda' and torch.cuda.is_available():
             self.device = 'cuda:0'
-            self.image_size = 512
+            self.image_size = 720
 
 
         # Apply transformations:
